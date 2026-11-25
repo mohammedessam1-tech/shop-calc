@@ -6,19 +6,19 @@
 <meta name="robots" content="noindex, nofollow">
 <title>حاسبة تسعير المحل</title>
 <style>
-:root{--ink:#2b2220;--mute:#7a6c68;--line:#e6dfdb;--bg:#fdfcfb;--card:#fff;--acc:#5f9a85;--warn:#b4472f;--sand:#f5f1ee}
+:root{--ink:#2b2220;--mute:#7a6c68;--line:#e6dfdb;--bg:#fdfcfb;--card:#fff;--acc:#1f5f4a;--warn:#b4472f;--sand:#f4f2ef}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,"Segoe UI",Tahoma,Arial,sans-serif}
 main{max-width:860px;margin:0 auto;padding:20px 16px 60px}
 h1{font-size:26px;margin:8px 0 4px}h2{font-size:19px;margin:0}
 .sub{color:var(--mute);margin:0 0 14px}
-.note{background:var(--sand);border-radius:12px;padding:12px 14px;font-size:14px;margin:12px 0}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:14px 0}
+.note{background:var(--sand);border-radius:8px;padding:10px 12px;font-size:14px;margin:12px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px;margin:16px 0}
 .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:10px 0}
 label{display:block;font-size:13px;color:var(--mute)}
-input,select{width:100%;font:inherit;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+input,select{width:100%;font:inherit;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
 input:focus,select:focus,button:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
-button{font:inherit;border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 14px;cursor:pointer;color:var(--ink)}
+button{font:inherit;border:1px solid var(--line);background:#fff;border-radius:8px;padding:9px 14px;cursor:pointer;color:var(--ink)}
 button.pri{background:var(--acc);border-color:var(--acc);color:#fff}
 button.sm{padding:5px 10px;font-size:13px}
 .head{display:flex;gap:8px;align-items:center;justify-content:space-between}
@@ -35,14 +35,21 @@ td input{padding:6px 7px;min-width:62px}
 .hist{border-top:1px dashed var(--line);margin-top:12px;padding-top:10px}
 .bar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
 .small{font-size:13px;color:var(--mute)}
-.warn{background:#fbeeea;color:var(--warn);border-radius:10px;padding:8px 10px;font-size:14px;margin-top:8px}
+.warn{background:#fbeeea;color:var(--warn);border-radius:8px;padding:8px 10px;font-size:14px;margin-top:8px}
 dialog{border:1px solid var(--line);border-radius:14px;max-width:520px;width:92%}
 textarea{width:100%;min-height:160px;font:12px monospace;direction:ltr}
-@media(max-width:640px){.tw{overflow:visible}table,tbody,tr,td{display:block;width:100%}thead{display:none}
-tr{border:1px solid var(--line);border-radius:12px;padding:8px 10px;margin:10px 0;background:var(--sand)}
-td{display:flex;justify-content:space-between;align-items:center;gap:10px;border:0;padding:4px 0}
-td::before{content:attr(data-l);color:var(--mute);font-size:13px}
-td input{max-width:130px;text-align:end}td:last-child{justify-content:flex-start}td:last-child::before{content:''}}
+td.key{font-weight:700;font-size:16px}td.profit{color:var(--acc)}td.profit.neg{color:var(--warn)}td.res{color:var(--mute)}
+th:nth-child(6),th:nth-child(8){color:var(--ink);font-weight:700}
+@media(max-width:640px){h1{font-size:22px}.tw{overflow:visible}table,tbody,tr{display:block;width:100%}thead{display:none}
+tr{display:grid;grid-template-columns:1fr 1fr;gap:8px 10px;border:1px solid var(--line);border-radius:8px;padding:12px;margin:12px 0;background:#fff}
+td{display:block;border:0;padding:0}
+td::before{content:attr(data-l);display:block;color:var(--mute);font-size:12px;margin-bottom:2px}
+td.in input{max-width:none;width:100%;text-align:start;min-width:0}
+td.key{grid-column:span 1;order:2;background:var(--sand);border-radius:8px;padding:8px 10px;font-size:20px}
+td.res{order:3;font-size:14px}
+td.in{order:1}
+td.x{order:4;grid-column:1/-1}td.x::before{content:none}
+.k{font-size:14px}}
 </style>
 </head>
 <body>
@@ -152,10 +159,10 @@ function render(focusPath){
       field('خصم (%)','items.'+i+'.discount',p.discount)+'</div>';
     html+='<div class="k"><span>'+(pc?'سعر شراء القطعة':'سعر شراء الكيلو')+'</span><b class="num">'+f(r.buyKg)+' جنيه</b></div><div class="k"><span>'+(pc?'تكلفة القطعة الصالحة للبيع بعد الهالك':'تكلفة الكيلو الصالح للبيع بعد الهالك')+'</span><b class="num">'+f(r.costKg)+' جنيه</b></div>';
     if(p.buyMode==='carton'&&r.cartonSellable>0)html+='<div class="k"><span>الكرتونة تطلع صالح للبيع</span><b class="num">'+f(r.cartonSellable,1)+(pc?' قطعة':' كجم')+'</b></div>';
-    html+='<div class="tw"><table><thead><tr><th>'+(pc?'العبوة (قطعة)':'العبوة (كجم)')+'</th><th>تغليف للعبوة (جنيه)</th><th>سعرك (اختياري)</th><th>عدد العبوات في الشهر</th><th>تكلفة العبوة</th><th>سعر مقترح</th><th>السعر بعد الخصم</th><th>ربح العبوة</th><th>زيادة على التكلفة</th><th>هامش</th><th></th></tr></thead><tbody>';
+    html+='<div class="tw"><table><thead><tr><th>'+(pc?'العبوة (قطعة)':'العبوة (كجم)')+'</th><th>تغليف للعبوة (جنيه)</th><th>سعرك (اختياري)</th><th>عدد العبوات في الشهر</th><th>تكلفة العبوة</th><th>سعر البيع</th><th>بعد الخصم</th><th>ربح العبوة</th><th>زيادة على التكلفة</th><th>هامش</th><th></th></tr></thead><tbody>';
     p.packs.forEach(function(k,j){var q=r.packs[j];var base='items.'+i+'.packs.'+j+'.';
-      html+='<tr><td data-l="'+(pc?'العبوة (قطعة)':'العبوة (كجم)')+'"><input inputmode="decimal" data-path="'+base+'size" value="'+esc(k.size)+'"></td><td data-l="تغليف للعبوة (جنيه)"><input inputmode="decimal" data-path="'+base+'bag" value="'+esc(k.bag)+'"></td><td data-l="سعرك (اختياري)"><input inputmode="decimal" data-path="'+base+'price" value="'+esc(k.price)+'" placeholder="'+f(q.sugg)+'"></td><td data-l="عدد العبوات في الشهر"><input inputmode="decimal" data-path="'+base+'count" value="'+esc(k.count)+'"></td>'+
-      '<td data-l="تكلفة العبوة" class="num">'+f(q.cost)+'</td><td data-l="سعر مقترح" class="num">'+f(q.sugg)+'</td><td data-l="السعر بعد الخصم" class="num">'+f(q.net)+'</td><td data-l="ربح العبوة" class="num '+(q.profit<0?'neg':'')+'">'+f(q.profit)+'</td><td data-l="زيادة على التكلفة" class="num">'+f(q.markupPct,1)+'%</td><td data-l="هامش" class="num">'+f(q.marginPct,1)+'%</td><td data-l=""><button class="sm" data-act="delpack" data-i="'+i+'" data-j="'+j+'" aria-label="حذف العبوة">×</button></td></tr>'});
+      html+='<tr><td class="in" data-l="'+(pc?'العبوة (قطعة)':'العبوة (كجم)')+'"><input inputmode="decimal" data-path="'+base+'size" value="'+esc(k.size)+'"></td><td class="in" data-l="تغليف للعبوة (جنيه)"><input inputmode="decimal" data-path="'+base+'bag" value="'+esc(k.bag)+'"></td><td class="in" data-l="سعرك (اختياري)"><input inputmode="decimal" data-path="'+base+'price" value="'+esc(k.price)+'" placeholder="'+f(q.sugg)+'"></td><td class="in" data-l="عدد العبوات في الشهر"><input inputmode="decimal" data-path="'+base+'count" value="'+esc(k.count)+'"></td>'+
+      '<td data-l="تكلفة العبوة" class="num res">'+f(q.cost)+'</td><td data-l="'+(q.manual?'سعر البيع (سعرك)':'سعر البيع (مقترح)')+'" class="num key price">'+f(q.price)+'</td><td data-l="بعد الخصم" class="num res">'+f(q.net)+'</td><td data-l="ربح العبوة" class="num key profit '+(q.profit<0?'neg':'')+'">'+f(q.profit)+'</td><td data-l="زيادة على التكلفة" class="num res">'+f(q.markupPct,1)+'%</td><td data-l="هامش" class="num res">'+f(q.marginPct,1)+'%</td><td class="x" data-l=""><button class="sm" data-act="delpack" data-i="'+i+'" data-j="'+j+'" aria-label="حذف العبوة">×</button></td></tr>'});
     html+='</tbody></table></div><div class="bar"><button class="sm" data-act="addpack" data-i="'+i+'">+ عبوة جديدة (ربع، نص، كيلو...)</button></div>';
     html+=histHtml(p,i,r,pc);
     if(r.packs.some(function(q){return q.profit<0}))html+='<div class="warn">في عبوة سعرها بعد الخصم أقل من تكلفتها.</div>';
